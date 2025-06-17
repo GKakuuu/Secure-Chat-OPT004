@@ -1,10 +1,9 @@
 'use client';
-
 import { useState } from 'react';
-import styles from './MessageForm.module.css';
+import styles from '../styles/Chat.module.css';
 
 interface Props {
-  onSend: (message: string) => void;
+  onSend: (msg: string) => void;
 }
 
 export default function MessageForm({ onSend }: Props) {
@@ -18,15 +17,15 @@ export default function MessageForm({ onSend }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form className={styles.messageForm} onSubmit={handleSubmit}>
       <input
+        className={styles.input}
         type="text"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Escribe un mensaje..."
-        className={styles.input}
+        placeholder="Escribe tu mensaje..."
       />
-      <button type="submit" className={styles.button}>Enviar</button>
+      <button className={styles.sendButton} type="submit">Enviar</button>
     </form>
   );
 }
