@@ -23,13 +23,12 @@ export class ChatService {
     private readonly aesService: AESService,
     private readonly rsaService: RSAService,
     private readonly httpService: HttpService,
-  ) { }
+  ) {}
 
   async sendMessage(dto: SendMessageDto) {
     const aesKey = this.aesService.generateKey();
     const { iv, encryptedData } = this.aesService.encrypt(dto.message, aesKey);
-
-    const peerPublicKey = this.rsaService.getPublicKey(dto.to);
+    const peerPublicKey = await this.fetchPublicKeyFromPeer(dto.to);
     const encryptedAESKey = this.rsaService.encryptAESKeyWithPublicKey(aesKey, peerPublicKey);
 
     const dataToSend = {
@@ -92,5 +91,19 @@ export class ChatService {
         timestamp: msg.timestamp,
       };
     });
+  }
+
+  // 🔐 Nuevo método para obtener la clave pública desde el peer por HTTP
+  private async fetchPublicKeyFromPeer(userId: string): Promise<string> {
+    const peerBaseUrl = this.peerUrl.replace('/chat/receive', '');
+    const url = `${peerBaseUrl}/keys/public/${userId}`;
+
+    try {
+      const response = await firstValueFrom(this.httpService.get<{ publicKey: string }>(url));
+      return response.data.publicKey;
+    } catch (err) {
+      this.logger.error(`No se pudo obtener la clave pública de ${userId}`, err);
+      throw new Error('Error al obtener clave pública del peer');
+    }
   }
 }
