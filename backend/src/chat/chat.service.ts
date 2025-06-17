@@ -23,7 +23,7 @@ export class ChatService {
     private readonly aesService: AESService,
     private readonly rsaService: RSAService,
     private readonly httpService: HttpService,
-  ) {}
+  ) { }
 
   async sendMessage(dto: SendMessageDto) {
     const aesKey = this.aesService.generateKey();
@@ -72,7 +72,7 @@ export class ChatService {
     return { status: 'stored', receivedFrom: from };
   }
 
-  getMessages(userId: string): { decrypted: string; from: string }[] {
+  getMessages(userId: string): { decrypted: string; from: string; timestamp: number }[] {
     const userInbox = this.inbox.get(userId) || [];
     const privateKey = this.rsaService.getPrivateKey(userId);
 
@@ -89,6 +89,7 @@ export class ChatService {
       return {
         from: msg.from,
         decrypted,
+        timestamp: msg.timestamp,
       };
     });
   }

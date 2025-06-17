@@ -19,8 +19,12 @@ export default function HomePage() {
 
   const fetchMessages = async () => {
     try {
-      const fetched = await getMessages();
-      setMessages(fetched);
+      const received = await getMessages();
+      // Filtra para no duplicar los mensajes enviados ya mostrados localmente
+      setMessages(prev => {
+        const sentMessages = prev.filter(m => m.from === userId);
+        return [...sentMessages, ...received];
+      });
     } catch (err) {
       console.error('Error al obtener mensajes:', err);
     }
