@@ -1,4 +1,3 @@
-// src/crypto/crypto.service.ts
 import { Injectable } from '@nestjs/common';
 import { AESService } from './aes.service';
 import { RSAService } from './rsa.service';
@@ -21,7 +20,10 @@ export class CryptoService {
     const receiverPublicKey = this.rsaService.getPublicKey(receiverId);
 
     // Cifrar clave AES con RSA
-    const encryptedKey = this.rsaService.encryptAESKeyWithPublicKey(aesKey, receiverPublicKey);
+    const encryptedKey = this.rsaService.encryptAESKeyWithPublicKey(
+      aesKey,
+      receiverPublicKey,
+    );
 
     return {
       encryptedMessage: encryptedData,
@@ -30,9 +32,17 @@ export class CryptoService {
     };
   }
 
-  decryptMessage(receiverId: string, encryptedAESKey: string, iv: string, encryptedMessage: string): string {
+  decryptMessage(
+    receiverId: string,
+    encryptedAESKey: string,
+    iv: string,
+    encryptedMessage: string,
+  ): string {
     const privateKey = this.rsaService.getPrivateKey(receiverId);
-    const aesKey = this.rsaService.decryptAESKeyWithPrivateKey(encryptedAESKey, privateKey);
+    const aesKey = this.rsaService.decryptAESKeyWithPrivateKey(
+      encryptedAESKey,
+      privateKey,
+    );
     return this.aesService.decrypt(encryptedMessage, aesKey, iv);
   }
 }

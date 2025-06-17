@@ -1,4 +1,3 @@
-// src/crypto/rsa.service.ts
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { constants } from 'crypto';
@@ -7,7 +6,8 @@ import * as path from 'path';
 
 @Injectable()
 export class RSAService implements OnModuleInit {
-  private readonly keyDir = process.env.KEYS_DIR || path.join(__dirname, '../../../keys');
+  private readonly keyDir =
+    process.env.KEYS_DIR || path.join(__dirname, '../../../keys');
   private readonly keySize = 2048;
 
   private getPrivateKeyPath(userId: string) {
@@ -62,7 +62,10 @@ export class RSAService implements OnModuleInit {
   }
 
   // Descifrar clave AES con tu clave privada
-  decryptAESKeyWithPrivateKey(encryptedKey: string, privateKey: string): Buffer {
+  decryptAESKeyWithPrivateKey(
+    encryptedKey: string,
+    privateKey: string,
+  ): Buffer {
     return crypto.privateDecrypt(
       {
         key: privateKey,
@@ -72,5 +75,4 @@ export class RSAService implements OnModuleInit {
       Buffer.from(encryptedKey, 'base64'),
     );
   }
-
 }

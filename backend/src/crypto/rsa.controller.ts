@@ -10,7 +10,7 @@ export class RSAController {
     try {
       const key = this.rsaService.getPublicKey(userId);
       return { publicKey: key };
-    } catch (error) {
+    } catch {
       throw new NotFoundException(`Clave pública no encontrada para ${userId}`);
     }
   }

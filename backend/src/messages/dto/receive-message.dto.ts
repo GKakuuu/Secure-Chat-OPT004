@@ -6,15 +6,24 @@ export class ReceiveMessageDto {
   @IsString()
   from: string;
 
-  @ApiProperty({ example: 'Base64EncryptedMessage', description: 'Mensaje cifrado en base64' })
+  @ApiProperty({
+    example: 'Base64EncryptedMessage',
+    description: 'Mensaje cifrado en base64',
+  })
   @IsString()
   encryptedMessage: string;
 
-  @ApiProperty({ example: 'Base64EncryptedAESKey', description: 'Clave AES cifrada con RSA (base64)' })
+  @ApiProperty({
+    example: 'Base64EncryptedAESKey',
+    description: 'Clave AES cifrada con RSA (base64)',
+  })
   @IsString()
   encryptedAESKey: string;
 
-  @ApiProperty({ example: 'IVBase64', description: 'IV del cifrado AES (base64)' })
+  @ApiProperty({
+    example: 'IVBase64',
+    description: 'IV del cifrado AES (base64)',
+  })
   @IsString()
   iv: string;
 }

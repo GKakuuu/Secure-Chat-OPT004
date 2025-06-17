@@ -6,7 +6,7 @@ import { RSAService } from 'src/crypto/rsa.service';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [HttpModule], // <- ¡Importante!
+  imports: [HttpModule],
   controllers: [ChatController],
   providers: [ChatService, AESService, RSAService],
 })

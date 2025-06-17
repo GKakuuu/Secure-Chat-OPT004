@@ -1,4 +1,3 @@
-// src/messages/messages.service.ts
 import { Injectable } from '@nestjs/common';
 import { AESService } from '../crypto/aes.service';
 import { RSAService } from '../crypto/rsa.service';
@@ -14,7 +13,10 @@ export class MessagesService {
     const aesKey = this.aesService.generateKey();
     const { encryptedData, iv } = this.aesService.encrypt(plainText, aesKey);
     const publicKey = this.rsaService.getPublicKey(to);
-    const encryptedAESKey = this.rsaService.encryptAESKeyWithPublicKey(aesKey, publicKey);
+    const encryptedAESKey = this.rsaService.encryptAESKeyWithPublicKey(
+      aesKey,
+      publicKey,
+    );
 
     return {
       encryptedMessage: encryptedData,
@@ -23,9 +25,18 @@ export class MessagesService {
     };
   }
 
-  decryptMessage(from: string, encryptedMessage: string, encryptedAESKey: string, iv: string, receiverId: string) {
+  decryptMessage(
+    from: string,
+    encryptedMessage: string,
+    encryptedAESKey: string,
+    iv: string,
+    receiverId: string,
+  ) {
     const privateKey = this.rsaService.getPrivateKey(receiverId);
-    const aesKey = this.rsaService.decryptAESKeyWithPrivateKey(encryptedAESKey, privateKey);
+    const aesKey = this.rsaService.decryptAESKeyWithPrivateKey(
+      encryptedAESKey,
+      privateKey,
+    );
     return this.aesService.decrypt(encryptedMessage, aesKey, iv);
   }
 }

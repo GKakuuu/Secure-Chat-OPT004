@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { SendMessageDto } from '../messages/dto/send-message.dto';
+import { ReceiveMessageDto } from '../messages/dto/receive-message.dto';
 import { ApiTags, ApiBody } from '@nestjs/swagger';
 
 @ApiTags('Chat')
@@ -15,37 +16,21 @@ export class ChatController {
   }
 
   @Post('receive')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        from: { type: 'string' },
-        encryptedMessage: { type: 'string' },
-        encryptedAESKey: { type: 'string' },
-        iv: { type: 'string' },
-      },
-      required: ['from', 'encryptedMessage', 'encryptedAESKey', 'iv'],
-    },
-  })
-  receiveMessage(
-    @Body('from') from: string,
-    @Body('encryptedMessage') encryptedMessage: string,
-    @Body('encryptedAESKey') encryptedAESKey: string,
-    @Body('iv') iv: string,
-  ) {
-    const to = process.env.USER_ID!;
+  @ApiBody({ type: ReceiveMessageDto })
+  receiveMessage(@Body() dto: ReceiveMessageDto) {
+    const to = process.env.USER_ID;
     return this.chatService.receiveMessage(
-      encryptedMessage,
-      encryptedAESKey,
-      iv,
-      from,
+      dto.encryptedMessage,
+      dto.encryptedAESKey,
+      dto.iv,
+      dto.from,
       to,
     );
   }
 
   @Get('messages')
   getMessages() {
-    const userId = process.env.USER_ID!;
+    const userId = process.env.USER_ID;
     return this.chatService.getMessages(userId);
   }
 }

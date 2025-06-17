@@ -6,7 +6,10 @@ export class SendMessageDto {
   @IsString()
   to: string;
 
-  @ApiProperty({ example: 'Hola, ¿cómo estás?', description: 'Mensaje plano a enviar' })
+  @ApiProperty({
+    example: 'Hola, ¿cómo estás?',
+    description: 'Mensaje plano a enviar',
+  })
   @IsString()
   message: string;
 }

@@ -1,4 +1,3 @@
-// src/messages/messages.controller.ts
 import { Body, Controller, Post } from '@nestjs/common';
 import { MessagesService } from './messages.service';
 import { SendMessageDto } from './dto/send-message.dto';
@@ -10,7 +9,10 @@ export class MessagesController {
 
   @Post('send')
   send(@Body() body: SendMessageDto) {
-    const encrypted = this.messagesService.encryptMessage(body.to, body.message);
+    const encrypted = this.messagesService.encryptMessage(
+      body.to,
+      body.message,
+    );
     return {
       to: body.to,
       ...encrypted,
@@ -19,7 +21,7 @@ export class MessagesController {
 
   @Post('receive')
   receive(@Body() body: ReceiveMessageDto) {
-    const receiverId = 'user-b'; // ⚠️ Simulación (usuario que recibe)
+    const receiverId = 'user-b';
     const message = this.messagesService.decryptMessage(
       body.from,
       body.encryptedMessage,

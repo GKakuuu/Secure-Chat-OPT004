@@ -1,8 +1,8 @@
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL!;
 const PEER_ID = process.env.NEXT_PUBLIC_PEER_ID!;
 const USER_ID = process.env.NEXT_PUBLIC_USER_ID!;
+const PEER_BACKEND_URL = process.env.NEXT_PUBLIC_PEER_BACKEND_URL!;
 
-// Cache de claves públicas
 const publicKeyCache: Record<string, string> = {};
 
 async function getPublicKey(userId: string): Promise<string> {
@@ -10,7 +10,7 @@ async function getPublicKey(userId: string): Promise<string> {
     return publicKeyCache[userId];
   }
 
-  const response = await fetch(`${BACKEND_URL}/keys/public/${userId}`);
+  const response = await fetch(`${PEER_BACKEND_URL}/keys/public/${userId}`);
   if (!response.ok) {
     throw new Error(`No se pudo obtener la clave pública de ${userId}`);
   }
@@ -18,7 +18,7 @@ async function getPublicKey(userId: string): Promise<string> {
   const data = await response.json();
   const publicKey = data.publicKey;
 
-  publicKeyCache[userId] = publicKey; // Guardar en caché
+  publicKeyCache[userId] = publicKey;
   return publicKey;
 }
 
