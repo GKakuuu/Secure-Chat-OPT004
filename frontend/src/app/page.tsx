@@ -20,10 +20,10 @@ export default function HomePage() {
   const fetchMessages = async () => {
     try {
       const received = await getMessages();
-      // Filtra para no duplicar los mensajes enviados ya mostrados localmente
       setMessages(prev => {
-        const sentMessages = prev.filter(m => m.from === userId);
-        return [...sentMessages, ...received];
+        const sent = prev.filter(m => m.from === userId);
+        const all = [...sent, ...received];
+        return all.sort((a, b) => a.timestamp - b.timestamp);
       });
     } catch (err) {
       console.error('Error al obtener mensajes:', err);
@@ -39,7 +39,6 @@ export default function HomePage() {
   const handleSend = async (msg: string) => {
     try {
       await sendMessage(msg);
-      // Simular mensaje local con timestamp para mostrarlo de inmediato
       setMessages(prev => [
         ...prev,
         {
